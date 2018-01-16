@@ -41,3 +41,24 @@ npm install babel-plugin-transform-react-fela-display-name --save-dev
 ```
 yarn add -D babel-plugin-transfrom-react-fela-display-name
 ```
+
+## How It Works
+
+This plugin works by injecting an extra line of code that sets the `displayName` after the component declaration.
+
+For instance:
+
+```js
+import { createComponentWithProxy } from 'react-fela';
+
+const MyComponent = createComponentWithProxy(() => ({}), 'input');
+```
+
+becomes:
+
+```js
+import { createComponentWithProxy } from 'react-fela';
+
+const MyComponent = createComponentWithProxy(() => ({}), 'input');
+MyComponent.displayName = 'MyComponent';
+```

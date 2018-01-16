@@ -4,16 +4,25 @@
   "description": "This plugin transforms the display names of all react-fela components created with createComponent or createComponentWithProxy to the name of the variable to which they are assigned.",
   "main": "src/index.js",
   "directories": {
-    "test": "test"
+    "test": "./test"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest ./test/index.js"
   },
   "author": "louis@louiscruz.io",
   "license": "ISC",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-module-resolver": "^3.0.0",
+    "babel-plugin-tester": "^5.0.0",
+    "babel-preset-env": "^1.6.1",
     "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-prettier": "^2.4.0",
+    "jest": "^22.1.1",
+    "prettier": "^1.10.2"
   }
 }
