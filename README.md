@@ -4,7 +4,7 @@
 
 This plugin transforms the display names of all `react-fela` components created with `createComponent` or `createComponentWithProxy` to the name of the variable to which they are assigned.
 
-For example:
+For example, given:
 
 ```js
 import { createComponent } from 'react-fela';
@@ -12,7 +12,7 @@ import { createComponent } from 'react-fela';
 const MyComponent = createComponent(() => ({}), 'input');
 ```
 
-typically renders as:
+`<MyComponent .../>` typically renders as:
 
 ```html
 <FelaComponent ...>
