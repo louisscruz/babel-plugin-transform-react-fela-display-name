@@ -9,12 +9,12 @@ pluginTester({
       code: `
         import { createComponent } from 'react-fela';
         const MyComponentRules = () => ({});
-        const MyComponent = createComponent(MyComonentRules, 'div');
+        const MyComponent = createComponent(MyComponentRules, 'div');
       `,
       output: `
         import { createComponent } from 'react-fela';
         const MyComponentRules = () => ({});
-        const MyComponent = createComponent(MyComonentRules, 'div');
+        const MyComponent = createComponent(MyComponentRules, 'div');
         MyComponent.displayName = 'MyComponent'
       `
     },
@@ -22,12 +22,12 @@ pluginTester({
       code: `
         import { createComponentWithProxy } from 'react-fela';
         const MyComponentRules = () => ({});
-        const MyComponent = createComponentWithProxy(MyComonentRules, 'div');
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
       `,
       output: `
         import { createComponentWithProxy } from 'react-fela';
         const MyComponentRules = () => ({});
-        const MyComponent = createComponentWithProxy(MyComonentRules, 'div');
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
         MyComponent.displayName = 'MyComponent'
       `
     },
@@ -35,7 +35,7 @@ pluginTester({
       import { createComponentWithProxy } from 'react-fela';
       const createComponentWithSomeOtherThing = el => el;
       const MyComponentRules = () => ({});
-      const MyComponent = createComponentWithSomeOtherThing(MyComonentRules, 'div');
+      const MyComponent = createComponentWithSomeOtherThing(MyComponentRules, 'div');
     `,
     'does not add a line for non-react-fela createComponent function calls': `
       const createComponent = el => el;
@@ -50,13 +50,13 @@ pluginTester({
         import { createComponent } from 'react-fela';
         const intermediaryVariable = createComponent;
         const MyComponentRules = () => ({});
-        const MyComponent = intermediaryVariable(MyComonentRules, 'div');
+        const MyComponent = intermediaryVariable(MyComponentRules, 'div');
       `,
       output: `
         import { createComponent } from 'react-fela';
         const intermediaryVariable = createComponent;
         const MyComponentRules = () => ({});
-        const MyComponent = intermediaryVariable(MyComonentRules, 'div');
+        const MyComponent = intermediaryVariable(MyComponentRules, 'div');
         MyComponent.displayName = 'MyComponent'
       `
     },
@@ -65,15 +65,59 @@ pluginTester({
         import { createComponentWithProxy } from 'react-fela';
         const intermediaryVariable = createComponentWithProxy;
         const MyComponentRules = () => ({});
-        const MyComponent = intermediaryVariable(MyComonentRules, 'div');
+        const MyComponent = intermediaryVariable(MyComponentRules, 'div');
       `,
       output: `
         import { createComponentWithProxy } from 'react-fela';
         const intermediaryVariable = createComponentWithProxy;
         const MyComponentRules = () => ({});
-        const MyComponent = intermediaryVariable(MyComonentRules, 'div');
+        const MyComponent = intermediaryVariable(MyComponentRules, 'div');
         MyComponent.displayName = 'MyComponent'
       `
-    }
+    },
+    'adds a line setting the displayName in scenarios where createComponent is from a default import of react-fela': {
+      code: `
+        import ReactFela from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        import ReactFela from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName in scenarios where createComponentWithProxy is from a default import of react-fela': {
+      code: `
+        import ReactFela from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+      `,
+      output: `
+        import ReactFela from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'does not add a line setting the displayName in scenarios where createComponent is a property on a non-react-fela object': `
+        const ReactFela = {
+          createComponent: () => ({})
+        };
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
+    `,
+    'does not add a line setting the displayName in scenarios where createComponentWithProxy is a property on a non-react-fela object': `
+        const ReactFela = {
+          createComponentWithProxy: () => ({})
+        };
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+    `,
+    'does not add a line setting the displayName in scenarios where createComponent is global': `
+      const MyComponentRules = () => ({});
+      const MyComponent = createComponent(MyComponentRules, 'div');
+    `
   }
 });
