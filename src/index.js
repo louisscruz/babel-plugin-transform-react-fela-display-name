@@ -37,7 +37,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   return {
     name: 'transform-react-fela-display-name',
     visitor: {
-      VariableDeclarator(path) {
+      VariableDeclarator(path, { opts }) {
         // Match cases such as:
         //
         // const x = y;
@@ -71,12 +71,21 @@ const transformReactFelaDisplayName = ({ types: t }) => {
             // const renameIt = createComponent;
             // const MyComponent = renameIt(...);
             //
-            const { object: { name: importedName } } = callee;
+            const { object: { name: variableName } } = callee;
+            if (variableName === opts.globalSource) {
+              // This handles the case where the recipient matches the provided global source name.
+              // For example:
+              // /* babel plugin options = { globalSource: 'ReactFela' } */
+              // const MyComponent = ReactFela.createComponent(...);
+              //
+              injectDisplayName(initialLineNodePath, componentName);
+              return;
+            }
             const { scope: { bindings } } = path;
-            if (!bindings[importedName]) return;
-            const { path: { parent } } = bindings[importedName];
+            if (!bindings[variableName]) return;
+            const { path: { parent } } = bindings[variableName];
             if (t.isImportDeclaration(parent)) {
-              const { path: { parent: { source: { value } } } } = bindings[importedName];
+              const { path: { parent: { source: { value } } } } = bindings[variableName];
 
               if (reactFelaPackageRegEx.test(value)) {
                 injectDisplayName(initialLineNodePath, componentName);

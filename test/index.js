@@ -115,9 +115,41 @@ pluginTester({
         const MyComponentRules = () => ({});
         const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
     `,
-    'does not add a line setting the displayName in scenarios where createComponent is global': `
+    'does not by default add a line setting the displayName in scenarios where createComponent is global': `
       const MyComponentRules = () => ({});
       const MyComponent = createComponent(MyComponentRules, 'div');
-    `
+    `,
+    'does not by default add a line setting the displayName in scenarios where createComponentWithProxy is global': `
+      const MyComponentRules = () => ({});
+      const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+    `,
+    'adds a line setting the displayName in scenarios where createComponent is global and the option is passed to do so': {
+      pluginOptions: {
+        globalSource: 'ReactFela'
+      },
+      code: `
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName in scenarios where createComponentWithProxy is global and the option is passed to do so': {
+      pluginOptions: {
+        globalSource: 'ReactFela'
+      },
+      code: `
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+      `,
+      output: `
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    }
   }
 });
