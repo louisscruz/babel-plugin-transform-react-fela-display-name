@@ -33,6 +33,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
       // This handles the following case:
       //
       // const createComponent = require('react-fela').createComponent;
+      //
       if (t.isMemberExpression(init)) {
         const { property, object: { callee } } = init;
         return callee.name === 'require' && functionNameRegEx.test(property.name);
