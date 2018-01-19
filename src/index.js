@@ -51,7 +51,11 @@ const transformReactFelaDisplayName = ({ types: t }) => {
         //
         // const x = y;
         //
-        const { node: { id, init, init: { callee } } } = path;
+        const { node: { id, init } } = path;
+
+        if (!init) return;
+
+        const { callee } = init;
 
         if (t.isCallExpression(init)) {
           // Match cases such as:
