@@ -143,4 +143,4 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   };
 };
 
-export default transformReactFelaDisplayName;
+module.exports = transformReactFelaDisplayName;
