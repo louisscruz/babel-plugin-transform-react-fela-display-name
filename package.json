@@ -1,11 +1,15 @@
 {
   "name": "babel-plugin-transform-react-fela-display-name",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description":
     "This plugin transforms the display names of all react-fela components created with createComponent or createComponentWithProxy to the name of the variable to which they are assigned.",
   "main": "src/index.js",
   "directories": {
     "test": "./test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/louisscruz/babel-plugin-transform-react-fela-display-name.git"
   },
   "scripts": {
     "start": "yarn test --watch",
