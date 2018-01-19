@@ -15,7 +15,7 @@ pluginTester({
         import { createComponent } from 'react-fela';
         const MyComponentRules = () => ({});
         const MyComponent = createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in simple scenarios when using createComponentWithProxy': {
@@ -28,7 +28,7 @@ pluginTester({
         import { createComponentWithProxy } from 'react-fela';
         const MyComponentRules = () => ({});
         const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in scenarios with multiple imports when using createComponent': {
@@ -41,7 +41,7 @@ pluginTester({
         import { somethingElse, createComponent } from 'react-fela';
         const MyComponentRules = () => ({});
         const MyComponent = createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in scenarios with multiple imports when using createComponentWithProxy': {
@@ -54,7 +54,7 @@ pluginTester({
         import { somethingElse, createComponentWithProxy } from 'react-fela';
         const MyComponentRules = () => ({});
         const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in scenarios with multiple package imports when using createComponent': {
@@ -71,7 +71,7 @@ pluginTester({
         import { createComponent } from 'react-fela';
         const MyComponentRules = () => ({});
         const MyComponent = createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in scenarios with multiple package imports when using createComponentWithProxy': {
@@ -88,7 +88,7 @@ pluginTester({
         import { createComponentWithProxy } from 'react-fela';
         const MyComponentRules = () => ({});
         const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName directly after the usage of createComponent': {
@@ -107,11 +107,11 @@ pluginTester({
         const x = 1;
         const MyComponentRules = () => ({});
         const MyComponent = createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
         const y = 2;
         const MyOtherComponentRules = () => ({});
         const MyOtherComponent = createComponent(MyOtherComponentRules, 'div');
-        MyOtherComponent.displayName = 'MyOtherComponent'
+        MyOtherComponent.displayName = 'MyOtherComponent';
         const z = 3;
       `
     },
@@ -131,11 +131,11 @@ pluginTester({
         const x = 1;
         const MyComponentRules = () => ({});
         const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
         const y = 2;
         const MyOtherComponentRules = () => ({});
         const MyOtherComponent = createComponentWithProxy(MyOtherComponentRules, 'div');
-        MyOtherComponent.displayName = 'MyOtherComponent'
+        MyOtherComponent.displayName = 'MyOtherComponent';
         const z = 3;
       `
     },
@@ -155,11 +155,11 @@ pluginTester({
         const x = 1;
         const MyComponentRules = () => ({});
         const MyComponent = createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
         const y = 2;
         const MyOtherComponentRules = () => ({});
         const MyOtherComponent = createComponentWithProxy(MyOtherComponentRules, 'div');
-        MyOtherComponent.displayName = 'MyOtherComponent'
+        MyOtherComponent.displayName = 'MyOtherComponent';
         const z = 3;
       `
     },
@@ -189,7 +189,7 @@ pluginTester({
         const intermediaryVariable = createComponent;
         const MyComponentRules = () => ({});
         const MyComponent = intermediaryVariable(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in scenarios where createComponentWithProxy is used through one intermediary variable': {
@@ -204,7 +204,7 @@ pluginTester({
         const intermediaryVariable = createComponentWithProxy;
         const MyComponentRules = () => ({});
         const MyComponent = intermediaryVariable(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in scenarios where createComponent is from a default import of react-fela': {
@@ -217,7 +217,7 @@ pluginTester({
         import ReactFela from 'react-fela';
         const MyComponentRules = () => ({});
         const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in scenarios where createComponentWithProxy is from a default import of react-fela': {
@@ -230,7 +230,7 @@ pluginTester({
         import ReactFela from 'react-fela';
         const MyComponentRules = () => ({});
         const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'does not add a line setting the displayName in scenarios where createComponent is a property on a non-react-fela object': `
@@ -266,7 +266,7 @@ pluginTester({
       output: `
         const MyComponentRules = () => ({});
         const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in scenarios where createComponentWithProxy is global and the option is passed to do so': {
@@ -280,7 +280,7 @@ pluginTester({
       output: `
         const MyComponentRules = () => ({});
         const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'does not add a line setting the displayName when the global does not match the globalSource': {
@@ -306,7 +306,7 @@ pluginTester({
         const createComponent = require('react-fela').createComponent;
         const MyComponentRules = () => ({});
         const MyComponent = createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in simple scenarios when using createComponentWithProxy when brought in through require property': {
@@ -319,7 +319,7 @@ pluginTester({
         const createComponentWithProxy = require('react-fela').createComponentWithProxy;
         const MyComponentRules = () => ({});
         const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in simple scenarios when using createComponent when brought in through require': {
@@ -332,7 +332,7 @@ pluginTester({
         const ReactFela = require('react-fela');
         const MyComponentRules = () => ({});
         const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     },
     'adds a line setting the displayName in simple scenarios when using createComponentWithProxy when brought in through require': {
@@ -345,7 +345,7 @@ pluginTester({
         const ReactFela = require('react-fela');
         const MyComponentRules = () => ({});
         const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
-        MyComponent.displayName = 'MyComponent'
+        MyComponent.displayName = 'MyComponent';
       `
     }
   }

@@ -5,7 +5,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   const handleInjectDisplayName = (initialLineNodePath, componentName) => {
     const left = t.memberExpression(t.identifier(componentName), t.identifier('displayName'));
     const right = t.stringLiteral(componentName);
-    const displayNameAssignment = t.assignmentExpression('=', left, right);
+    const displayNameAssignment = t.toStatement(t.assignmentExpression('=', left, right));
     initialLineNodePath.insertAfter(displayNameAssignment);
   };
 
