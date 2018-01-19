@@ -31,6 +31,138 @@ pluginTester({
         MyComponent.displayName = 'MyComponent'
       `
     },
+    'adds a line setting the displayName in scenarios with multiple imports when using createComponent': {
+      code: `
+        import { somethingElse, createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        import { somethingElse, createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName in scenarios with multiple imports when using createComponentWithProxy': {
+      code: `
+        import { somethingElse, createComponentWithProxy } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+      `,
+      output: `
+        import { somethingElse, createComponentWithProxy } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName in scenarios with multiple package imports when using createComponent': {
+      code: `
+        import something from 'something';
+        import { somethingElse } from 'react-fela';
+        import { createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        import something from 'something';
+        import { somethingElse } from 'react-fela';
+        import { createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName in scenarios with multiple package imports when using createComponentWithProxy': {
+      code: `
+        import something from 'something';
+        import { somethingElse } from 'react-fela';
+        import { createComponentWithProxy } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+      `,
+      output: `
+        import something from 'something';
+        import { somethingElse } from 'react-fela';
+        import { createComponentWithProxy } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName directly after the usage of createComponent': {
+      code: `
+        import { createComponent } from 'react-fela';
+        const x = 1;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+        const y = 2;
+        const MyOtherComponentRules = () => ({});
+        const MyOtherComponent = createComponent(MyOtherComponentRules, 'div');
+        const z = 3;
+      `,
+      output: `
+        import { createComponent } from 'react-fela';
+        const x = 1;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+        const y = 2;
+        const MyOtherComponentRules = () => ({});
+        const MyOtherComponent = createComponent(MyOtherComponentRules, 'div');
+        MyOtherComponent.displayName = 'MyOtherComponent'
+        const z = 3;
+      `
+    },
+    'adds a line setting the displayName directly after the usage of createComponentWithProxy': {
+      code: `
+        import { createComponentWithProxy } from 'react-fela';
+        const x = 1;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+        const y = 2;
+        const MyOtherComponentRules = () => ({});
+        const MyOtherComponent = createComponentWithProxy(MyOtherComponentRules, 'div');
+        const z = 3;
+      `,
+      output: `
+        import { createComponentWithProxy } from 'react-fela';
+        const x = 1;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+        const y = 2;
+        const MyOtherComponentRules = () => ({});
+        const MyOtherComponent = createComponentWithProxy(MyOtherComponentRules, 'div');
+        MyOtherComponent.displayName = 'MyOtherComponent'
+        const z = 3;
+      `
+    },
+    'adds a line setting the displayName directly after the mixed usage of createComponent and createComponentWithProxy': {
+      code: `
+        import { createComponent, createComponentWithProxy } from 'react-fela';
+        const x = 1;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+        const y = 2;
+        const MyOtherComponentRules = () => ({});
+        const MyOtherComponent = createComponentWithProxy(MyOtherComponentRules, 'div');
+        const z = 3;
+      `,
+      output: `
+        import { createComponent, createComponentWithProxy } from 'react-fela';
+        const x = 1;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+        const y = 2;
+        const MyOtherComponentRules = () => ({});
+        const MyOtherComponent = createComponentWithProxy(MyOtherComponentRules, 'div');
+        MyOtherComponent.displayName = 'MyOtherComponent'
+        const z = 3;
+      `
+    },
     'does not add a line for functions that do not match the correct name': `
       import { createComponentWithProxy } from 'react-fela';
       const createComponentWithSomeOtherThing = el => el;
