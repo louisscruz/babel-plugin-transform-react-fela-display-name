@@ -2,7 +2,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   const functionNameRegEx = /^createComponent(WithProxy)?$/;
   const reactFelaPackageRegEx = /react-fela(\/.*(\.js)?)?$/;
 
-  const injectDisplayName = (initialLineNodePath, componentName) => {
+  const handleInjectDisplayName = (initialLineNodePath, componentName) => {
     const left = t.memberExpression(t.identifier(componentName), t.identifier('displayName'));
     const right = t.stringLiteral(componentName);
     const displayNameAssignment = t.assignmentExpression('=', left, right);
@@ -60,6 +60,9 @@ const transformReactFelaDisplayName = ({ types: t }) => {
           const componentName = id.name;
           const initialLineNodePath = path.parentPath;
 
+          const injectDisplayName = () =>
+            handleInjectDisplayName(initialLineNodePath, componentName);
+
           if (
             callee.name &&
             callee.name.match(functionNameRegEx) &&
@@ -71,7 +74,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
             // /* or */
             // const y = createComponentWithProxy(...);
             //
-            injectDisplayName(initialLineNodePath, componentName);
+            injectDisplayName();
           } else if (t.isMemberExpression(callee)) {
             // This handles default imports of createComponent functions. For example:
             //
@@ -86,7 +89,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
               // /* babel plugin options = { globalSource: 'ReactFela' } */
               // const MyComponent = ReactFela.createComponent(...);
               //
-              injectDisplayName(initialLineNodePath, componentName);
+              injectDisplayName();
               return;
             }
             const { scope: { bindings } } = path;
@@ -96,7 +99,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
               const { path: { parent: { source: { value } } } } = bindings[variableName];
 
               if (reactFelaPackageRegEx.test(value)) {
-                injectDisplayName(initialLineNodePath, componentName);
+                injectDisplayName();
               }
             } else if (t.isVariableDeclaration(parent)) {
               // This handles the following case:
@@ -110,7 +113,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
                   reactFelaPackageRegEx.test(arg.value)
                 );
                 if (isRequiredFromReact) {
-                  injectDisplayName(initialLineNodePath, componentName);
+                  injectDisplayName();
                 }
               }
             }
@@ -130,7 +133,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
               // const renameIt = createComponent;
               // const MyComponent = renameIt(...);
               //
-              injectDisplayName(initialLineNodePath, componentName);
+              injectDisplayName();
             }
           }
         }
