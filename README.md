@@ -62,3 +62,48 @@ import { createComponentWithProxy } from 'react-fela';
 const MyComponent = createComponentWithProxy(() => ({}), 'input');
 MyComponent.displayName = 'MyComponent';
 ```
+
+## Usage
+
+### Via ``.babelrc` (Recommended)
+
+```json
+{
+  "plugins": ["transform-react-fela-display-name"]
+}
+```
+
+### Via CLI
+
+```shell
+babel --plugins transform-react-fela-display-name script.js
+```
+
+### Via Node API
+
+```js
+require('babel-core').transform('code', {
+  plugins: ['transform-react-fela-display-name']
+});
+```
+
+## Options
+
+### `globalSource`
+
+If you happen to be providing the `react-fela` package globally, you can specify the variable name under which is made so.
+
+For instance, the following allows for this plugin to latch onto usage of `ReactFela.createComponent` or `ReactFela.createComponentWithProxy`:
+
+```json
+{
+  "plugins": [
+    [
+      "transform-react-fela-display-name",
+      {
+        "globalSource": "ReactFela"
+      }
+    ]
+  ]
+}
+```
