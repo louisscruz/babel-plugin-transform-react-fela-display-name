@@ -10,11 +10,9 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   };
 
   const identifierComesFromReactFela = (identifierDeclarationPath, calleeName) => {
-    const reactFelaRegEx = /react-fela(\/index(\.js)?)?$/;
     const { scope: { bindings } } = identifierDeclarationPath;
     if (!bindings[calleeName]) return false;
     const sourcePath = bindings[calleeName].path;
-    // console.log(identifierDeclarationPath.node);
 
     if (sourcePath.isImportSpecifier() && sourcePath.parentPath.isImportDeclaration()) {
       // Handle cases where the function is imported destructured. For example:
@@ -27,10 +25,20 @@ const transformReactFelaDisplayName = ({ types: t }) => {
         parent: { source: { value: sourceImportFrom } },
         node: { imported: { name: importedName } }
       } = sourcePath;
-      const isFromReactFela = reactFelaRegEx.test(sourceImportFrom);
+      const isFromReactFela = reactFelaPackageRegEx.test(sourceImportFrom);
       const validImportedName = functionNameRegEx.test(importedName);
       return isFromReactFela && validImportedName;
+    } else if (sourcePath.isVariableDeclarator()) {
+      const { node: { init } } = sourcePath;
+      // This handles the following case:
+      //
+      // const createComponent = require('react-fela').createComponent;
+      if (t.isMemberExpression(init)) {
+        const { property, object: { callee } } = init;
+        return callee.name === 'require' && functionNameRegEx.test(property.name);
+      }
     }
+
     return false;
   };
 
@@ -83,12 +91,27 @@ const transformReactFelaDisplayName = ({ types: t }) => {
             }
             const { scope: { bindings } } = path;
             if (!bindings[variableName]) return;
-            const { path: { parent } } = bindings[variableName];
+            const { path: { parent, node: bindingNode } } = bindings[variableName];
             if (t.isImportDeclaration(parent)) {
               const { path: { parent: { source: { value } } } } = bindings[variableName];
 
               if (reactFelaPackageRegEx.test(value)) {
                 injectDisplayName(initialLineNodePath, componentName);
+              }
+            } else if (t.isVariableDeclaration(parent)) {
+              // This handles the following case:
+              //
+              // const ReactFela = require('react-fela');
+              // const MyComponent = ReactFela.createComponent(...);
+              //
+              const { init: bindingInit } = bindingNode;
+              if (t.isVariableDeclarator(bindingNode) && t.isCallExpression(bindingInit)) {
+                const isRequiredFromReact = bindingInit.arguments.some(arg =>
+                  reactFelaPackageRegEx.test(arg.value)
+                );
+                if (isRequiredFromReact) {
+                  injectDisplayName(initialLineNodePath, componentName);
+                }
               }
             }
           } else {

@@ -150,6 +150,71 @@ pluginTester({
         const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
         MyComponent.displayName = 'MyComponent'
       `
+    },
+    'does not add a line setting the displayName when the global does not match the globalSource': {
+      pluginOptions: {
+        globalSource: 'SomethingWeird'
+      },
+      code: `
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+      `,
+      output: `
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+      `
+    },
+    'adds a line setting the displayName in simple scenarios when using createComponent when brought in through require property': {
+      code: `
+        const createComponent = require('react-fela').createComponent;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        const createComponent = require('react-fela').createComponent;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName in simple scenarios when using createComponentWithProxy when brought in through require property': {
+      code: `
+        const createComponentWithProxy = require('react-fela').createComponentWithProxy;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+      `,
+      output: `
+        const createComponentWithProxy = require('react-fela').createComponentWithProxy;
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponentWithProxy(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName in simple scenarios when using createComponent when brought in through require': {
+      code: `
+        const ReactFela = require('react-fela');
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        const ReactFela = require('react-fela');
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
+    },
+    'adds a line setting the displayName in simple scenarios when using createComponentWithProxy when brought in through require': {
+      code: `
+        const ReactFela = require('react-fela');
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+      `,
+      output: `
+        const ReactFela = require('react-fela');
+        const MyComponentRules = () => ({});
+        const MyComponent = ReactFela.createComponentWithProxy(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent'
+      `
     }
   }
 });
