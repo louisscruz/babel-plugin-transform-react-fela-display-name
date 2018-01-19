@@ -13,6 +13,7 @@
   },
   "author": "louis@louiscruz.io",
   "license": "ISC",
+  "keywords": ["babel", "plugin", "transform", "react", "fela", "display", "name", "displayname"],
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
