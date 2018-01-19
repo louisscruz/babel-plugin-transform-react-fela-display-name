@@ -1,6 +1,6 @@
 module.exports = {
-  plugins: ['import', 'prettier'],
-  extends: ['airbnb-base', 'prettier'],
+  plugins: ['import', 'prettier', 'react'],
+  extends: ['airbnb-base', 'prettier', 'plugin:react/recommended'],
   rules: {
     'prettier/prettier': 'error',
     'comma-dangle': ['error', 'never'],

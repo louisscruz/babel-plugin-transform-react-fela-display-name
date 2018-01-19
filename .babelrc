@@ -1,10 +1,10 @@
 {
-  "presets": ["env"],
+  "presets": ["env", "react"],
   "plugins": [
     [
       "module-resolver",
       {
-        "root": ["./src"],
+        "root": ["./src", "./node_modules"],
         "alias": {
           "test": "./test"
         }
