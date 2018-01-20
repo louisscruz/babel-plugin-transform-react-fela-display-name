@@ -1,0 +1,265 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transform-react-fela-display-name adds a line after the class setting the displayName when using createComponent when the assignment is a static property of a class when from an object: adds a line after the class setting the displayName when using createComponent when the assignment is a static property of a class when from an object 1`] = `
+"
+import React from 'react';
+import ReactFela from 'react-fela';
+
+const MyChildComponentRules = () => ({});
+
+class MyParentComponent extends React.Component {
+  static MyChildComponent = ReactFela.createComponent(MyChildComponentRules, 'div');
+
+  render() {
+    return (
+      <MyParentComponent.MyChildComponent />
+    )
+  }
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\\"value\\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('../node_modules/react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _lib = require('../node_modules/react-fela/lib');
+
+var _lib2 = _interopRequireDefault(_lib);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\\"Cannot call a class as a function\\"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\\"this hasn't been initialised - super() hasn't been called\\"); } return call && (typeof call === \\"object\\" || typeof call === \\"function\\") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== \\"function\\" && superClass !== null) { throw new TypeError(\\"Super expression must either be null or a function, not \\" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MyChildComponentRules = function MyChildComponentRules() {
+  return {};
+};
+
+var MyParentComponent = function (_React$Component) {
+  _inherits(MyParentComponent, _React$Component);
+
+  function MyParentComponent() {
+    _classCallCheck(this, MyParentComponent);
+
+    return _possibleConstructorReturn(this, (MyParentComponent.__proto__ || Object.getPrototypeOf(MyParentComponent)).apply(this, arguments));
+  }
+
+  _createClass(MyParentComponent, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(MyParentComponent.MyChildComponent, null);
+    }
+  }]);
+
+  return MyParentComponent;
+}(_react2.default.Component);
+
+MyParentComponent.MyChildComponent = _lib2.default.createComponent(MyChildComponentRules, 'div');
+MyParentComponent.MyChildComponent.displayName = 'MyChildComponent';
+"
+`;
+
+exports[`transform-react-fela-display-name adds a line after the class setting the displayName when using createComponent when the assignment is a static property of a class: adds a line after the class setting the displayName when using createComponent when the assignment is a static property of a class 1`] = `
+"
+import React from 'react';
+import { createComponent } from 'react-fela';
+
+const MyChildComponentRules = () => ({});
+
+class MyParentComponent extends React.Component {
+  static MyChildComponent = createComponent(MyChildComponentRules, 'div');
+
+  render() {
+    return (
+      <MyParentComponent.MyChildComponent />
+    )
+  }
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\\"value\\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('../node_modules/react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _lib = require('../node_modules/react-fela/lib');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\\"Cannot call a class as a function\\"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\\"this hasn't been initialised - super() hasn't been called\\"); } return call && (typeof call === \\"object\\" || typeof call === \\"function\\") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== \\"function\\" && superClass !== null) { throw new TypeError(\\"Super expression must either be null or a function, not \\" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MyChildComponentRules = function MyChildComponentRules() {
+  return {};
+};
+
+var MyParentComponent = function (_React$Component) {
+  _inherits(MyParentComponent, _React$Component);
+
+  function MyParentComponent() {
+    _classCallCheck(this, MyParentComponent);
+
+    return _possibleConstructorReturn(this, (MyParentComponent.__proto__ || Object.getPrototypeOf(MyParentComponent)).apply(this, arguments));
+  }
+
+  _createClass(MyParentComponent, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(MyParentComponent.MyChildComponent, null);
+    }
+  }]);
+
+  return MyParentComponent;
+}(_react2.default.Component);
+
+MyParentComponent.MyChildComponent = (0, _lib.createComponent)(MyChildComponentRules, 'div');
+MyParentComponent.MyChildComponent.displayName = 'MyChildComponent';
+"
+`;
+
+exports[`transform-react-fela-display-name adds a line after the class setting the displayName when using createComponentWithProxy when the assignment is a static property of a class when from an object: adds a line after the class setting the displayName when using createComponentWithProxy when the assignment is a static property of a class when from an object 1`] = `
+"
+import React from 'react';
+import ReactFela from 'react-fela';
+
+const MyChildComponentRules = () => ({});
+
+class MyParentComponent extends React.Component {
+  static MyChildComponent = ReactFela.createComponentWithProxy(MyChildComponentRules, 'div');
+
+  render() {
+    return (
+      <MyParentComponent.MyChildComponent />
+    )
+  }
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\\"value\\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('../node_modules/react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _lib = require('../node_modules/react-fela/lib');
+
+var _lib2 = _interopRequireDefault(_lib);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\\"Cannot call a class as a function\\"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\\"this hasn't been initialised - super() hasn't been called\\"); } return call && (typeof call === \\"object\\" || typeof call === \\"function\\") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== \\"function\\" && superClass !== null) { throw new TypeError(\\"Super expression must either be null or a function, not \\" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MyChildComponentRules = function MyChildComponentRules() {
+  return {};
+};
+
+var MyParentComponent = function (_React$Component) {
+  _inherits(MyParentComponent, _React$Component);
+
+  function MyParentComponent() {
+    _classCallCheck(this, MyParentComponent);
+
+    return _possibleConstructorReturn(this, (MyParentComponent.__proto__ || Object.getPrototypeOf(MyParentComponent)).apply(this, arguments));
+  }
+
+  _createClass(MyParentComponent, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(MyParentComponent.MyChildComponent, null);
+    }
+  }]);
+
+  return MyParentComponent;
+}(_react2.default.Component);
+
+MyParentComponent.MyChildComponent = _lib2.default.createComponentWithProxy(MyChildComponentRules, 'div');
+MyParentComponent.MyChildComponent.displayName = 'MyChildComponent';
+"
+`;
+
+exports[`transform-react-fela-display-name adds a line after the class setting the displayName when using createComponentWithProxy when the assignment is a static property of a class: adds a line after the class setting the displayName when using createComponentWithProxy when the assignment is a static property of a class 1`] = `
+"
+import React from 'react';
+import { createComponentWithProxy } from 'react-fela';
+
+const MyChildComponentRules = () => ({});
+
+class MyParentComponent extends React.Component {
+  static MyChildComponent = createComponentWithProxy(MyChildComponentRules, 'div');
+
+  render() {
+    return (
+      <MyParentComponent.MyChildComponent />
+    )
+  }
+}
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\\"value\\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('../node_modules/react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _lib = require('../node_modules/react-fela/lib');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\\"Cannot call a class as a function\\"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\\"this hasn't been initialised - super() hasn't been called\\"); } return call && (typeof call === \\"object\\" || typeof call === \\"function\\") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== \\"function\\" && superClass !== null) { throw new TypeError(\\"Super expression must either be null or a function, not \\" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MyChildComponentRules = function MyChildComponentRules() {
+  return {};
+};
+
+var MyParentComponent = function (_React$Component) {
+  _inherits(MyParentComponent, _React$Component);
+
+  function MyParentComponent() {
+    _classCallCheck(this, MyParentComponent);
+
+    return _possibleConstructorReturn(this, (MyParentComponent.__proto__ || Object.getPrototypeOf(MyParentComponent)).apply(this, arguments));
+  }
+
+  _createClass(MyParentComponent, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(MyParentComponent.MyChildComponent, null);
+    }
+  }]);
+
+  return MyParentComponent;
+}(_react2.default.Component);
+
+MyParentComponent.MyChildComponent = (0, _lib.createComponentWithProxy)(MyChildComponentRules, 'div');
+MyParentComponent.MyChildComponent.displayName = 'MyChildComponent';
+"
+`;

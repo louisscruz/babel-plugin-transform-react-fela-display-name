@@ -2,8 +2,11 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   const functionNameRegEx = /^createComponent(WithProxy)?$/;
   const reactFelaPackageRegEx = /react-fela(\/.*(\.js)?)?$/;
 
-  const handleInjectDisplayName = (initialLineNodePath, componentName) => {
-    const left = t.memberExpression(t.identifier(componentName), t.identifier('displayName'));
+  const handleInjectDisplayName = (initialLineNodePath, componentName, objectName) => {
+    const leftLeft = objectName
+      ? t.memberExpression(t.identifier(objectName), t.identifier(componentName))
+      : t.identifier(componentName);
+    const left = t.memberExpression(leftLeft, t.identifier('displayName'));
     const right = t.stringLiteral(componentName);
     const displayNameAssignment = t.toStatement(t.assignmentExpression('=', left, right));
     initialLineNodePath.insertAfter(displayNameAssignment);
@@ -46,6 +49,44 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   return {
     name: 'transform-react-fela-display-name',
     visitor: {
+      AssignmentExpression(path) {
+        // This adds the ability to handle components created and assigned to objects of properties.
+        // This handles the case of a component being created as a class property. For example:
+        //
+        // class MyParentComponent extends React.Component {
+        //   static MyChildComponent = createComponent(() => ({}), 'div');
+        //   ...
+        // }
+        //
+        const { node: { left, right } } = path;
+        if (t.isMemberExpression(left) && t.isCallExpression(right)) {
+          const { callee } = right;
+          if (t.isMemberExpression(callee)) {
+            // This handles the case where the assignment is to a default import of the package.
+            // For example:
+            //
+            // import ReactFela from 'react-fela';
+            // class MyParentComponent extends React.Component {
+            //   static MyChildComponent = ReactFela.createComponent(() => ({}), 'div');
+            // }
+            //
+            const { object: { name: variableName } } = callee;
+            const { scope: { bindings } } = path;
+            const binding = bindings[variableName];
+            if (!binding || !binding.path || !binding.path.parent) return;
+
+            const { path: { parent: importDeclaration } } = binding;
+
+            if (t.isImportDeclaration(importDeclaration)) {
+              const { object: { name: objectName }, property: { name: propertyName } } = left;
+              handleInjectDisplayName(path.parentPath, propertyName, objectName);
+            }
+          } else if (identifierComesFromReactFela(path, callee.name)) {
+            const { object: { name: objectName }, property: { name: propertyName } } = left;
+            handleInjectDisplayName(path.parentPath, propertyName, objectName);
+          }
+        }
+      },
       VariableDeclarator(path, { opts }) {
         // Match cases such as:
         //
