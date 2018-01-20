@@ -49,7 +49,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   return {
     name: 'transform-react-fela-display-name',
     visitor: {
-      AssignmentExpression(path) {
+      AssignmentExpression(path, { opts }) {
         // This adds the ability to handle components created and assigned to objects of properties.
         // This handles the case of a component being created as a class property. For example:
         //
@@ -60,6 +60,10 @@ const transformReactFelaDisplayName = ({ types: t }) => {
         //
         const { node: { left, right } } = path;
         if (t.isMemberExpression(left) && t.isCallExpression(right)) {
+          const injectAssignmentDisplayName = () => {
+            const { object: { name: objectName }, property: { name: propertyName } } = left;
+            return handleInjectDisplayName(path.parentPath, propertyName, objectName);
+          };
           const { callee } = right;
           if (t.isMemberExpression(callee)) {
             // This handles the case where the assignment is to a default import of the package.
@@ -72,18 +76,20 @@ const transformReactFelaDisplayName = ({ types: t }) => {
             //
             const { object: { name: variableName } } = callee;
             const { scope: { bindings } } = path;
+            if (variableName === opts.globalSource) {
+              injectAssignmentDisplayName();
+              return;
+            }
             const binding = bindings[variableName];
             if (!binding || !binding.path || !binding.path.parent) return;
 
             const { path: { parent: importDeclaration } } = binding;
 
             if (t.isImportDeclaration(importDeclaration)) {
-              const { object: { name: objectName }, property: { name: propertyName } } = left;
-              handleInjectDisplayName(path.parentPath, propertyName, objectName);
+              injectAssignmentDisplayName();
             }
           } else if (identifierComesFromReactFela(path, callee.name)) {
-            const { object: { name: objectName }, property: { name: propertyName } } = left;
-            handleInjectDisplayName(path.parentPath, propertyName, objectName);
+            injectAssignmentDisplayName();
           }
         }
       },

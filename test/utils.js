@@ -5,6 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 import transformReactFelaDisplayName from '../src';
 
+const React = require('react');
 const ReactFela = require('react-fela');
 const babel = require('babel-core');
 
@@ -39,19 +40,22 @@ export const shallow = (node, options = {}) => {
   return component;
 };
 
-const handleComponentGeneration = ({ shouldUsePlugin }) => componentCode => {
-  const plugins = [
-    [
-      'module-resolver',
-      {
-        root: ['./src', './node_modules'],
-        alias: {
-          test: './test'
-        }
+const defaultPlugins = () => [
+  [
+    'module-resolver',
+    {
+      root: ['./src', './node_modules'],
+      alias: {
+        test: './test'
       }
-    ]
-  ];
+    }
+  ]
+];
 
+const handleComponentGeneration = ({ shouldUsePlugin }) => (
+  componentCode,
+  plugins = defaultPlugins()
+) => {
   if (shouldUsePlugin) plugins.push([transformReactFelaDisplayName, { globalSource: 'ReactFela' }]);
 
   const { code } = babel.transform(componentCode, {
@@ -62,13 +66,14 @@ const handleComponentGeneration = ({ shouldUsePlugin }) => componentCode => {
   // eslint-disable-next-line no-new-func
   const MyComponentFile = new Function(
     'ReactFela',
+    'React',
     `
     ${code}
     return MyComponent;
     `
   );
 
-  return MyComponentFile(ReactFela);
+  return MyComponentFile(ReactFela, React);
 };
 
 export const generateComponentWithoutPlugin = handleComponentGeneration({ shouldUsePlugin: false });

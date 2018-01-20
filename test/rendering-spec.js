@@ -1,21 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   shallow,
   mount,
   generateComponentWithPlugin,
   generateComponentWithoutPlugin
 } from './utils';
-
-const MyButton = ({ text }) => <button>{text}</button>;
-
-MyButton.propTypes = {
-  text: PropTypes.string
-};
-
-MyButton.defaultProps = {
-  text: ''
-};
 
 const myComponentInputCode = `
   const MyComponentRules = () => ({});
@@ -61,6 +50,37 @@ describe('rendering component hierarchy', () => {
       const wrapper = mount(<MyComponent />);
       expect(wrapper.find('MyComponentRules').length).toBe(1);
       expect(wrapper.find('div').length).toBe(1);
+    });
+
+    describe('when assigned as a class property', () => {
+      const plugins = [
+        'transform-class-properties',
+        [
+          'module-resolver',
+          {
+            root: ['./src', './node_modules'],
+            alias: {
+              test: './test'
+            }
+          }
+        ]
+      ];
+
+      const myParentComponentInputCode = `
+        const MyChildComponentRules = () => ({});
+        class MyComponent extends React.Component {
+          static MyChildComponent = ReactFela.createComponent(MyChildComponentRules, 'div');
+
+          render() {
+            return MyComponent.MyChildComponent;
+          }
+        }
+      `;
+
+      const MyParentComponent = generateComponentWithPlugin(myParentComponentInputCode, plugins);
+      it('sets the displayName', () => {
+        expect(MyParentComponent.MyChildComponent.displayName).toEqual('MyChildComponent');
+      });
     });
   });
 });

@@ -443,6 +443,58 @@ pluginTester({
         }
       `,
       snapshot: true
+    },
+    'adds a line after the class setting the displayName when using createComponent when the assignment is a static property of a class when global': {
+      pluginOptions: {
+        globalSource: 'ReactFela'
+      },
+      // The babelrc brings in the necessary transform-class-properties plugin.
+      babelOptions: {
+        filename: __filename,
+        babelrc: true
+      },
+      code: `
+        import React from 'react';
+
+        const MyChildComponentRules = () => ({});
+
+        class MyParentComponent extends React.Component {
+          static MyChildComponent = ReactFela.createComponent(MyChildComponentRules, 'div');
+
+          render() {
+            return (
+              <MyParentComponent.MyChildComponent />
+            )
+          }
+        }
+      `,
+      snapshot: true
+    },
+    'adds a line after the class setting the displayName when using createComponentWithProxy when the assignment is a static property of a class when global': {
+      pluginOptions: {
+        globalSource: 'ReactFela'
+      },
+      // The babelrc brings in the necessary transform-class-properties plugin.
+      babelOptions: {
+        filename: __filename,
+        babelrc: true
+      },
+      code: `
+        import React from 'react';
+
+        const MyChildComponentRules = () => ({});
+
+        class MyParentComponent extends React.Component {
+          static MyChildComponent = ReactFela.createComponentWithProxy(MyChildComponentRules, 'div');
+
+          render() {
+            return (
+              <MyParentComponent.MyChildComponent />
+            )
+          }
+        }
+      `,
+      snapshot: true
     }
   }
 });
