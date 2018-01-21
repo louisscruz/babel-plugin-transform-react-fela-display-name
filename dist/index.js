@@ -1,22 +1,25 @@
-const transformReactFelaDisplayName = ({ types: t }) => {
-  const functionNameRegEx = /^createComponent(WithProxy)?$/;
-  const reactFelaPackageRegEx = /react-fela(\/.*(\.js)?)?$/;
+'use strict';
 
-  const handleInjectDisplayName = (initialLineNodePath, componentName, objectName) => {
+var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref) {
+  var t = _ref.types;
+
+  var functionNameRegEx = /^createComponent(WithProxy)?$/;
+  var reactFelaPackageRegEx = /react-fela(\/.*(\.js)?)?$/;
+
+  var handleInjectDisplayName = function handleInjectDisplayName(initialLineNodePath, componentName, objectName) {
     if (!initialLineNodePath || !componentName) return;
-    const leftLeft = objectName
-      ? t.memberExpression(t.identifier(objectName), t.identifier(componentName))
-      : t.identifier(componentName);
-    const left = t.memberExpression(leftLeft, t.identifier('displayName'));
-    const right = t.stringLiteral(componentName);
-    const displayNameAssignment = t.toStatement(t.assignmentExpression('=', left, right));
+    var leftLeft = objectName ? t.memberExpression(t.identifier(objectName), t.identifier(componentName)) : t.identifier(componentName);
+    var left = t.memberExpression(leftLeft, t.identifier('displayName'));
+    var right = t.stringLiteral(componentName);
+    var displayNameAssignment = t.toStatement(t.assignmentExpression('=', left, right));
     initialLineNodePath.insertAfter(displayNameAssignment);
   };
 
-  const identifierComesFromReactFela = (identifierDeclarationPath, calleeName) => {
-    const { scope: { bindings } } = identifierDeclarationPath;
+  var identifierComesFromReactFela = function identifierComesFromReactFela(identifierDeclarationPath, calleeName) {
+    var bindings = identifierDeclarationPath.scope.bindings;
+
     if (!bindings[calleeName]) return false;
-    const sourcePath = bindings[calleeName].path;
+    var sourcePath = bindings[calleeName].path;
 
     if (sourcePath.isImportSpecifier() && sourcePath.parentPath.isImportDeclaration()) {
       // Handle cases where the function is imported destructured. For example:
@@ -25,21 +28,23 @@ const transformReactFelaDisplayName = ({ types: t }) => {
       // /* or */
       // import { createComponentWithProxy }j from 'react-fela';
       //
-      const {
-        parent: { source: { value: sourceImportFrom } },
-        node: { imported: { name: importedName } }
-      } = sourcePath;
-      const isFromReactFela = reactFelaPackageRegEx.test(sourceImportFrom);
-      const validImportedName = functionNameRegEx.test(importedName);
+      var sourceImportFrom = sourcePath.parent.source.value,
+          importedName = sourcePath.node.imported.name;
+
+      var isFromReactFela = reactFelaPackageRegEx.test(sourceImportFrom);
+      var validImportedName = functionNameRegEx.test(importedName);
       return isFromReactFela && validImportedName;
     } else if (sourcePath.isVariableDeclarator()) {
-      const { node: { init } } = sourcePath;
+      var init = sourcePath.node.init;
       // This handles the following case:
       //
       // const createComponent = require('react-fela').createComponent;
       //
+
       if (t.isMemberExpression(init)) {
-        const { property, object: { callee } } = init;
+        var property = init.property,
+            callee = init.object.callee;
+
         return callee.name === 'require' && functionNameRegEx.test(property.name);
       }
     }
@@ -50,7 +55,9 @@ const transformReactFelaDisplayName = ({ types: t }) => {
   return {
     name: 'transform-react-fela-display-name',
     visitor: {
-      AssignmentExpression(path, { opts }) {
+      AssignmentExpression: function AssignmentExpression(path, _ref2) {
+        var opts = _ref2.opts;
+
         // This adds the ability to handle components created and assigned to objects of properties.
         // This handles the case of a component being created as a class property. For example:
         //
@@ -59,13 +66,19 @@ const transformReactFelaDisplayName = ({ types: t }) => {
         //   ...
         // }
         //
-        const { node: { left, right } } = path;
+        var _path$node = path.node,
+            left = _path$node.left,
+            right = _path$node.right;
+
         if (t.isMemberExpression(left) && t.isCallExpression(right)) {
-          const injectAssignmentDisplayName = () => {
-            const { object: { name: objectName }, property: { name: propertyName } } = left;
+          var injectAssignmentDisplayName = function injectAssignmentDisplayName() {
+            var objectName = left.object.name,
+                propertyName = left.property.name;
+
             return handleInjectDisplayName(path.parentPath, propertyName, objectName);
           };
-          const { callee } = right;
+          var callee = right.callee;
+
           if (t.isMemberExpression(callee)) {
             // This handles the case where the assignment is to a default import of the package.
             // For example:
@@ -75,16 +88,18 @@ const transformReactFelaDisplayName = ({ types: t }) => {
             //   static MyChildComponent = ReactFela.createComponent(() => ({}), 'div');
             // }
             //
-            const { object: { name: variableName } } = callee;
-            const { scope: { bindings } } = path;
+            var variableName = callee.object.name;
+            var bindings = path.scope.bindings;
+
             if (variableName === opts.globalSource) {
               injectAssignmentDisplayName();
               return;
             }
-            const binding = bindings[variableName];
+            var binding = bindings[variableName];
             if (!binding || !binding.path || !binding.path.parent) return;
 
-            const { path: { parent: importDeclaration } } = binding;
+            var importDeclaration = binding.path.parent;
+
 
             if (t.isImportDeclaration(importDeclaration)) {
               injectAssignmentDisplayName();
@@ -94,33 +109,36 @@ const transformReactFelaDisplayName = ({ types: t }) => {
           }
         }
       },
-      VariableDeclarator(path, { opts }) {
+      VariableDeclarator: function VariableDeclarator(path, _ref3) {
+        var opts = _ref3.opts;
+
         // Match cases such as:
         //
         // const x = y;
         //
-        const { node: { id, init } } = path;
+        var _path$node2 = path.node,
+            id = _path$node2.id,
+            init = _path$node2.init;
+
 
         if (!init) return;
 
-        const { callee } = init;
+        var callee = init.callee;
+
 
         if (t.isCallExpression(init)) {
           // Match cases such as:
           //
           // const x = y();
           //
-          const componentName = id.name;
-          const initialLineNodePath = path.parentPath;
+          var componentName = id.name;
+          var initialLineNodePath = path.parentPath;
 
-          const injectDisplayName = () =>
-            handleInjectDisplayName(initialLineNodePath, componentName);
+          var injectDisplayName = function injectDisplayName() {
+            return handleInjectDisplayName(initialLineNodePath, componentName);
+          };
 
-          if (
-            callee.name &&
-            callee.name.match(functionNameRegEx) &&
-            identifierComesFromReactFela(path, callee.name)
-          ) {
+          if (callee.name && callee.name.match(functionNameRegEx) && identifierComesFromReactFela(path, callee.name)) {
             // Match cases such as:
             //
             // const x = createComponent(...);
@@ -135,7 +153,8 @@ const transformReactFelaDisplayName = ({ types: t }) => {
             // const renameIt = createComponent;
             // const MyComponent = renameIt(...);
             //
-            const { object: { name: variableName } } = callee;
+            var variableName = callee.object.name;
+
             if (variableName === opts.globalSource) {
               // This handles the case where the recipient matches the provided global source name.
               // For example:
@@ -145,11 +164,16 @@ const transformReactFelaDisplayName = ({ types: t }) => {
               injectDisplayName();
               return;
             }
-            const { scope: { bindings } } = path;
+            var bindings = path.scope.bindings;
+
             if (!bindings[variableName]) return;
-            const { path: { parent, node: bindingNode } } = bindings[variableName];
+            var _bindings$variableNam = bindings[variableName].path,
+                parent = _bindings$variableNam.parent,
+                bindingNode = _bindings$variableNam.node;
+
             if (t.isImportDeclaration(parent)) {
-              const { path: { parent: { source: { value } } } } = bindings[variableName];
+              var value = bindings[variableName].path.parent.source.value;
+
 
               if (reactFelaPackageRegEx.test(value)) {
                 injectDisplayName();
@@ -160,26 +184,26 @@ const transformReactFelaDisplayName = ({ types: t }) => {
               // const ReactFela = require('react-fela');
               // const MyComponent = ReactFela.createComponent(...);
               //
-              const { init: bindingInit } = bindingNode;
+              var bindingInit = bindingNode.init;
+
               if (t.isVariableDeclarator(bindingNode) && t.isCallExpression(bindingInit)) {
-                const isRequiredFromReact = bindingInit.arguments.some(arg =>
-                  reactFelaPackageRegEx.test(arg.value)
-                );
+                var isRequiredFromReact = bindingInit.arguments.some(function (arg) {
+                  return reactFelaPackageRegEx.test(arg.value);
+                });
                 if (isRequiredFromReact) {
                   injectDisplayName();
                 }
               }
             }
           } else {
-            const { scope: { bindings } } = path;
-            const functionBinding = bindings[callee.name];
-            if (!functionBinding) return;
-            const { path: { node: { init: bindingInit } } } = functionBinding;
+            var _bindings = path.scope.bindings;
 
-            if (
-              t.isIdentifier(bindingInit) &&
-              identifierComesFromReactFela(functionBinding.path, bindingInit.name)
-            ) {
+            var functionBinding = _bindings[callee.name];
+            if (!functionBinding) return;
+            var _bindingInit = functionBinding.path.node.init;
+
+
+            if (t.isIdentifier(_bindingInit) && identifierComesFromReactFela(functionBinding.path, _bindingInit.name)) {
               // This handles renaming of the createComponent functions. For example:
               //
               // import { createComponent } from 'react-fela';
@@ -196,3 +220,4 @@ const transformReactFelaDisplayName = ({ types: t }) => {
 };
 
 module.exports = transformReactFelaDisplayName;
+//# sourceMappingURL=index.js.map
