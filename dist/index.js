@@ -91,7 +91,7 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
             var variableName = callee.object.name;
             var bindings = path.scope.bindings;
 
-            if (variableName === opts.globalSource) {
+            if (variableName && variableName === opts.globalSource) {
               injectAssignmentDisplayName();
               return;
             }
@@ -155,7 +155,7 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
             //
             var variableName = callee.object.name;
 
-            if (variableName === opts.globalSource) {
+            if (variableName && variableName === opts.globalSource) {
               // This handles the case where the recipient matches the provided global source name.
               // For example:
               // /* babel plugin options = { globalSource: 'ReactFela' } */
