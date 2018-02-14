@@ -45,7 +45,7 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
         var property = init.property,
             callee = init.object.callee;
 
-        return callee.name === 'require' && functionNameRegEx.test(property.name);
+        return callee && callee.name === 'require' && property && functionNameRegEx.test(property.name);
       }
     }
 

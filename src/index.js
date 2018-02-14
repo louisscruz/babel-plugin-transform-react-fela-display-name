@@ -40,7 +40,9 @@ const transformReactFelaDisplayName = ({ types: t }) => {
       //
       if (t.isMemberExpression(init)) {
         const { property, object: { callee } } = init;
-        return callee.name === 'require' && functionNameRegEx.test(property.name);
+        return (
+          callee && callee.name === 'require' && property && functionNameRegEx.test(property.name)
+        );
       }
     }
 
