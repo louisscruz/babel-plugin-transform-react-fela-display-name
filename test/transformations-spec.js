@@ -18,6 +18,68 @@ pluginTester({
         MyComponent.displayName = 'MyComponent';
       `
     },
+    'adds a line setting the displayName in simple scenarios when using custom functionNameRegEx': {
+      pluginOptions: {
+        functionNameRegEx: '^customFunction?$'
+      },
+      code: `
+        import { customFunction } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = customFunction(MyComponentRules, 'div');
+      `,
+      output: `
+        import { customFunction } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = customFunction(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent';
+      `
+    },
+    'does not add a line setting the displayName in simple scenarios when using custom functionNameRegEx and function not matching': {
+      pluginOptions: {
+        functionNameRegEx: '^customFunction?$'
+      },
+      code: `
+        import { createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        import { createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+      `
+    },
+    'adds a line setting the displayName in simple scenarios when using custom reactFelaPackageRegEx': {
+      pluginOptions: {
+        reactFelaPackageRegEx: 'custom-package'
+      },
+      code: `
+        import { createComponent } from 'custom-package';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        import { createComponent } from 'custom-package';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent';
+      `
+    },
+    'does not a line setting the displayName in simple scenarios when using custom reactFelaPackageRegEx and package name not matching': {
+      pluginOptions: {
+        reactFelaPackageRegEx: 'custom-package'
+      },
+      code: `
+        import { createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        import { createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        const MyComponent = createComponent(MyComponentRules, 'div');
+      `
+    },
     'adds a line setting the displayName in simple scenarios when using createComponentWithProxy': {
       code: `
         import { createComponentWithProxy } from 'react-fela';

@@ -3,8 +3,8 @@
 var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref) {
   var t = _ref.types;
 
-  var functionNameRegEx = /^createComponent(WithProxy)?$/;
-  var reactFelaPackageRegEx = /react-fela(\/.*(\.js)?)?$/;
+  var defaultFunctionNameRegEx = /^createComponent(WithProxy)?$/;
+  var defaultReactFelaPackageRegEx = /react-fela(\/.*(\.js)?)?$/;
 
   var handleInjectDisplayName = function handleInjectDisplayName(initialLineNodePath, componentName, objectName) {
     if (!initialLineNodePath || !componentName) return;
@@ -15,7 +15,7 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
     initialLineNodePath.insertAfter(displayNameAssignment);
   };
 
-  var identifierComesFromReactFela = function identifierComesFromReactFela(identifierDeclarationPath, calleeName) {
+  var identifierComesFromReactFela = function identifierComesFromReactFela(identifierDeclarationPath, calleeName, functionNameRegEx, reactFelaPackageRegEx) {
     var bindings = identifierDeclarationPath.scope.bindings;
 
     if (!bindings[calleeName]) return false;
@@ -70,6 +70,8 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
             left = _path$node.left,
             right = _path$node.right;
 
+        var functionNameRegEx = new RegExp(opts.functionNameRegEx) || defaultFunctionNameRegEx;
+        var reactFelaPackageRegEx = new RegExp(opts.reactFelaPackageRegEx) || defaultReactFelaPackageRegEx;
         if (t.isMemberExpression(left) && t.isCallExpression(right)) {
           var injectAssignmentDisplayName = function injectAssignmentDisplayName() {
             var objectName = left.object.name,
@@ -104,7 +106,7 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
             if (t.isImportDeclaration(importDeclaration)) {
               injectAssignmentDisplayName();
             }
-          } else if (identifierComesFromReactFela(path, callee.name)) {
+          } else if (identifierComesFromReactFela(path, callee.name, functionNameRegEx, reactFelaPackageRegEx)) {
             injectAssignmentDisplayName();
           }
         }
@@ -120,7 +122,8 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
             id = _path$node2.id,
             init = _path$node2.init;
 
-
+        var functionNameRegEx = new RegExp(opts.functionNameRegEx) || defaultFunctionNameRegEx;
+        var reactFelaPackageRegEx = new RegExp(opts.reactFelaPackageRegEx) || defaultReactFelaPackageRegEx;
         if (!init) return;
 
         var callee = init.callee;
@@ -138,7 +141,7 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
             return handleInjectDisplayName(initialLineNodePath, componentName);
           };
 
-          if (callee.name && callee.name.match(functionNameRegEx) && identifierComesFromReactFela(path, callee.name)) {
+          if (callee.name && callee.name.match(functionNameRegEx) && identifierComesFromReactFela(path, callee.name, functionNameRegEx, reactFelaPackageRegEx)) {
             // Match cases such as:
             //
             // const x = createComponent(...);
@@ -203,7 +206,7 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
             var _bindingInit = functionBinding.path.node.init;
 
 
-            if (t.isIdentifier(_bindingInit) && identifierComesFromReactFela(functionBinding.path, _bindingInit.name)) {
+            if (t.isIdentifier(_bindingInit) && identifierComesFromReactFela(functionBinding.path, _bindingInit.name, functionNameRegEx, reactFelaPackageRegEx)) {
               // This handles renaming of the createComponent functions. For example:
               //
               // import { createComponent } from 'react-fela';
