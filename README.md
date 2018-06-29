@@ -110,3 +110,43 @@ For instance, the following allows for this plugin to latch onto usage of `React
   ]
 }
 ```
+
+
+### `functionNameRegEx`
+
+You can provide a custom regular expression to check against for function usage instead of the original one which will only match `createComponent` and
+`createComponentWithProxy`.
+
+For instance, the following allows for this plugin to latch onto usage of `customFunction`.
+
+```json
+{
+  "plugins": [
+    [
+      "transform-react-fela-display-name",
+      {
+        "functionNameRegEx": "customFunction"
+      }
+    ]
+  ]
+}
+```
+
+### `reactFelaPackageRegEx`
+
+You can provide a custom regular expression to check against instead of the original one for package name which will only match `react-fela`.
+
+For instance, the following allows for this plugin to latch onto usage of `createComponent` imported from `custom-package`.
+
+```json
+{
+  "plugins": [
+    [
+      "transform-react-fela-display-name",
+      {
+        "reactFelaPackageRegEx": "custom-package"
+      }
+    ]
+  ]
+}
+```
