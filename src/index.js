@@ -10,6 +10,7 @@ const transformReactFelaDisplayName = ({ types: t }) => {
     const left = t.memberExpression(leftLeft, t.identifier('displayName'));
     const right = t.stringLiteral(componentName);
     const displayNameAssignment = t.toStatement(t.assignmentExpression('=', left, right));
+
     initialLineNodePath.insertAfter(displayNameAssignment);
   };
 
@@ -130,7 +131,18 @@ const transformReactFelaDisplayName = ({ types: t }) => {
           // const x = y();
           //
           const componentName = id.name;
-          const initialLineNodePath = path.parentPath;
+          let initialLineNodePath = path.parentPath;
+
+          // in case there is an Named Export declaration upstream such as:
+          // export const MyComponent = createComponent(MyComponentRules, 'div');
+          // we will want to insert the displayName assignment after the export decleration
+
+          const exportNamedDeclaration = initialLineNodePath.findParent(p =>
+            p.isExportNamedDeclaration()
+          );
+          if (exportNamedDeclaration) {
+            initialLineNodePath = exportNamedDeclaration;
+          }
 
           const injectDisplayName = () =>
             handleInjectDisplayName(initialLineNodePath, componentName);

@@ -12,6 +12,7 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
     var left = t.memberExpression(leftLeft, t.identifier('displayName'));
     var right = t.stringLiteral(componentName);
     var displayNameAssignment = t.toStatement(t.assignmentExpression('=', left, right));
+
     initialLineNodePath.insertAfter(displayNameAssignment);
   };
 
@@ -136,6 +137,17 @@ var transformReactFelaDisplayName = function transformReactFelaDisplayName(_ref)
           //
           var componentName = id.name;
           var initialLineNodePath = path.parentPath;
+
+          // in case there is an Named Export declaration upstream such as:
+          // export const MyComponent = createComponent(MyComponentRules, 'div');
+          // we will want to insert the displayName assignment after the export decleration
+
+          var exportNamedDeclaration = initialLineNodePath.findParent(function (p) {
+            return p.isExportNamedDeclaration();
+          });
+          if (exportNamedDeclaration) {
+            initialLineNodePath = exportNamedDeclaration;
+          }
 
           var injectDisplayName = function injectDisplayName() {
             return handleInjectDisplayName(initialLineNodePath, componentName);

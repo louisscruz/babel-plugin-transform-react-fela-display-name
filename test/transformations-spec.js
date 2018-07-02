@@ -18,6 +18,19 @@ pluginTester({
         MyComponent.displayName = 'MyComponent';
       `
     },
+    'adds a line setting the displayName in the case where the assignment is happening within named export': {
+      code: `
+        import { createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        export const MyComponent = createComponent(MyComponentRules, 'div');
+      `,
+      output: `
+        import { createComponent } from 'react-fela';
+        const MyComponentRules = () => ({});
+        export const MyComponent = createComponent(MyComponentRules, 'div');
+        MyComponent.displayName = 'MyComponent';
+      `
+    },
     'adds a line setting the displayName in simple scenarios when using custom functionNameRegEx': {
       pluginOptions: {
         functionNameRegEx: '^customFunction?$'
