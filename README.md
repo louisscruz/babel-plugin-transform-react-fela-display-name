@@ -1,4 +1,5 @@
 [![npm version](https://badge.fury.io/js/babel-plugin-transform-react-fela-display-name.svg)](https://badge.fury.io/js/babel-plugin-transform-react-fela-display-name)
+[![codecov](https://codecov.io/gh/louisscruz/babel-plugin-transform-react-fela-display-name/branch/master/graph/badge.svg)](https://codecov.io/gh/louisscruz/babel-plugin-transform-react-fela-display-name)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 # babel-plugin-transform-react-fela-display-name
@@ -68,7 +69,7 @@ MyComponent.displayName = 'MyComponent';
 
 ## Usage
 
-### Via ``.babelrc` (Recommended)
+### Via `.babelrc` (Recommended)
 
 ```json
 {
@@ -110,7 +111,6 @@ For instance, the following allows for this plugin to latch onto usage of `React
   ]
 }
 ```
-
 
 ### `functionNameRegEx`
 
