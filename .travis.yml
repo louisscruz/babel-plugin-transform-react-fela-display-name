@@ -16,6 +16,8 @@ jobs:
   include:
       env: NAME_OF_JOB=test
       script: ./scripts/ci/test.sh
+    - env: NAME_OF_JOB=validate-dist
+      script: ./scripts/ci/validate-dist.sh
 env:
   global:
     # CODECOV_TOKEN
