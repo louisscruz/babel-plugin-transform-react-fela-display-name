@@ -5,7 +5,7 @@ set -e
 echo 'travis_fold:start:VALIDATE_CODECOV_CONFIG'
 
 cat ./codecov.yml | curl -s --data-binary @- https://codecov.io/validate --connect-timeout 5 -- max-time 5 --retry 5 --retry-delay 0 --retry-max-time 30 | grep Valid! || {
-  echo 'Failed to validate lotus_react/codecov.yml with Codecov. This either means that file is invalid or Codecov can not currently be reached.'
+  echo 'Failed to validate codecov.yml with Codecov. This either means that file is invalid or Codecov can not currently be reached.'
   exit 1
 }
 

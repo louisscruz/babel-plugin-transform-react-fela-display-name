@@ -14,7 +14,7 @@ if: (type IN (pull_request)) OR ((branch = master) AND (type IN (push)))
 jobs:
   fast_finish: true
   include:
-      env: NAME_OF_JOB=test
+    - env: NAME_OF_JOB=test
       script: ./scripts/ci/test.sh
     - env: NAME_OF_JOB=validate-dist
       script: ./scripts/ci/validate-dist.sh

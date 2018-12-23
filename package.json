@@ -22,6 +22,7 @@
   "keywords": ["babel", "plugin", "transform", "react", "fela", "display", "name", "displayname"],
   "jest": {
     "testRegex": "test/.*(test|spec).js?$",
+    "collectCoverageFrom": ["src/**/*.js"],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
