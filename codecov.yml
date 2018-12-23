@@ -1,0 +1,22 @@
+codecov:
+  branch: master
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  # https://codecov.readme.io/v1.0/docs/commit-status#section-project-status
+  status:
+    project:
+      # https://docs.codecov.io/docs/commit-status
+      code-coverage:
+        target: auto
+        threshold: 0.05
+        only_pulls: true
+    patch: off
+comment:
+  layout: "reach, diff, files"
+  behavior: default
+  require_changes: false  # if true: only post the comment if coverage changes
+  require_base: no        # [yes :: must have a base report to post]
+  require_head: yes       # [yes :: must have a head report to post]
+  branches: null

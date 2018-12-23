@@ -1,0 +1,22 @@
+language: node_js
+sudo: false
+dist: trusty
+branches:
+  only:
+    # Run Travis for all branches.
+    - /.*/
+cache:
+  yarn: true
+  directories:
+    - node_modules
+# Conditional syntax: https://docs.travis-ci.com/user/conditional-builds-stages-jobs/
+if: (type IN (pull_request)) OR ((branch = master) AND (type IN (push)))
+jobs:
+  fast_finish: true
+  include:
+      env: NAME_OF_JOB=test
+      script: ./scripts/ci/test.sh
+env:
+  global:
+    # CODECOV_TOKEN
+    - secure: "mwDziGaBWd1yzjbcLf7ccCEsNb+E6dGgLuczUeGgtLEmtn/37rmOitMybk8wDAmspBDmiKSeRH2RAVENY5GjwpswL0uiEAw6gT3pqiv8+q1KFwNAvk5V2q9O+TnGJj//gYOo6I0FhJgvx0QV2vU3bwpeInSpAyW8qma9ubmSZa5DaVq3+0rr2UjqRRL7h616knMsTyekQYAD/ccBOqPuQ/9jKXn8NGj4PUpprvi4ov+BEhCyKjs8P17VxBrPRuYmn5Rttzwe8lYAsCyw3lBYIoai6sCZjAr5TKtdwlGRlQKFHwjKjimb8WBjngyrJIUx6wm5qqwscaRmuGSt0IkOE7oAeBf54lwpkK8S7cQtP8JihcHuh8Ysq0AP8IuxAfM/Hzj6YpptNaxN2/iqRgcBKzoylzRwTZ5KMdWNZvVvPq4du+4pMe/UVa6LKtV0M8JalfQHSEv6WFlHvFABWXv4Oire58/wrnIhZWdqSUvHZti2G58J+7IqSi0QgBgIcL/ml7HOK1W5KTkkDu06zGfnMvwgZCJNAJ6NPtUoPWWJIIh9IfEz/nt30J0et86Ybhpn+ykYA8/I7Qtt1y/Z9rzK+6995AvulDMGCPwYcRT9e8IF7y9f1QwqFog3or5TUMpotmnRkz0BMSZEx3DSk6uZ4Vi+aK0ntyQCzs1QI+BmXkk="
