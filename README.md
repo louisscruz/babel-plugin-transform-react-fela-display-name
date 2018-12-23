@@ -150,3 +150,11 @@ For instance, the following allows for this plugin to latch onto usage of `creat
   ]
 }
 ```
+
+## Changelog
+
+Changes to this package are recorded in the [CHANGELOG.md](./CHANGELOG.md).
+
+## Contributing
+
+All pull requests must pass the CI status checks.
